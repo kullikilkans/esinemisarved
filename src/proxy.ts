@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { relativeRedirect } from "@/lib/redirect";
 import { SESSION_COOKIE, getAppPassword, isValidSession } from "@/lib/auth";
 
 // Everything except the login page, login/logout endpoints and static assets
@@ -10,7 +11,7 @@ export async function proxy(request: NextRequest) {
     if (isApi) {
       return Response.json({ error: "Rakendus pole seadistatud." }, { status: 503 });
     }
-    return NextResponse.redirect(new URL("/login?error=config", request.url));
+    return relativeRedirect("/login?error=config", 307);
   }
 
   if (await isValidSession(request.cookies.get(SESSION_COOKIE)?.value)) {
@@ -20,7 +21,7 @@ export async function proxy(request: NextRequest) {
   if (isApi) {
     return Response.json({ error: "Palun logi sisse." }, { status: 401 });
   }
-  return NextResponse.redirect(new URL("/login", request.url));
+  return relativeRedirect("/login", 307);
 }
 
 export const config = {

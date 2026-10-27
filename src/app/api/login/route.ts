@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { relativeRedirect } from "@/lib/redirect";
 import {
   SESSION_COOKIE,
   SESSION_MAX_AGE,
@@ -11,20 +11,14 @@ export async function POST(request: Request) {
   const password = String(form.get("password") ?? "");
   const token = await expectedSessionToken();
 
-  if (!token) {
-    return NextResponse.redirect(new URL("/login?error=config", request.url), 303);
-  }
-  if (!(await isCorrectPassword(password))) {
-    return NextResponse.redirect(new URL("/login?error=wrong", request.url), 303);
-  }
+  if (!token) return relativeRedirect("/login?error=config");
+  if (!(await isCorrectPassword(password))) return relativeRedirect("/login?error=wrong");
 
-  const response = NextResponse.redirect(new URL("/", request.url), 303);
-  response.cookies.set(SESSION_COOKIE, token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: SESSION_MAX_AGE,
-  });
+  const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
+  const response = relativeRedirect("/");
+  response.headers.append(
+    "Set-Cookie",
+    `${SESSION_COOKIE}=${token}; Path=/; Max-Age=${SESSION_MAX_AGE}; HttpOnly; SameSite=Lax${secure}`,
+  );
   return response;
 }
