@@ -1,0 +1,41 @@
+{
+  "_note": "Fictional test data for the Esinemisarved homework app. All names, registry codes, VAT numbers and IBANs are made up.",
+  "companies": [
+    {
+      "code": "A",
+      "name": "Laanemets Music OÜ",
+      "regCode": "12345678",
+      "vatRegistered": true,
+      "vatNumber": "EE123456789",
+      "vatRate": 24,
+      "address": "Pikk tn 1-5, 10123 Tallinn",
+      "iban": "EE001010000000000001",
+      "bank": "Näidispank",
+      "email": "arved@laanemetsmusic.example.ee",
+      "invoicePrefix": "LM",
+      "nextInvoiceNo": 1
+    },
+    {
+      "code": "B",
+      "name": "KL Helikunst OÜ",
+      "regCode": "87654321",
+      "vatRegistered": false,
+      "vatNumber": null,
+      "vatRate": 0,
+      "address": "Pikk tn 1-5, 10123 Tallinn",
+      "iban": "EE002200000000000002",
+      "bank": "Näidispank",
+      "email": "helikunst@example.ee",
+      "invoicePrefix": "KH",
+      "nextInvoiceNo": 1
+    }
+  ],
+  "customers": [
+    { "name": "Rannakohvik Merikarp OÜ", "regCode": "10000001", "address": "Ranna pst 3, 80010 Pärnu", "email": "info@merikarp.example.ee" },
+    { "name": "Tartu Jazzklubi OÜ", "regCode": "10000002", "address": "Rüütli 12, 51007 Tartu", "email": "booking@jazzklubi.example.ee" },
+    { "name": "Hotell Põhjatäht AS", "regCode": "10000003", "address": "Mere pst 20, 10111 Tallinn", "email": "events@pohjataht.example.ee" },
+    { "name": "Viljandi Kultuurimaja SA", "regCode": "90000004", "address": "Tallinna 5, 71003 Viljandi", "email": "kultuur@viljandi.example.ee" },
+    { "name": "Mõisa Pulmateenused OÜ", "regCode": "10000005", "address": "Mõisa tee 1, 74001 Kuusalu", "email": "pulmad@moisa.example.ee" },
+    { "name": "Saaremaa Suvepäevade MTÜ", "regCode": "80000006", "address": "Tallinna 2, 93811 Kuressaare", "email": "info@suvepaevad.example.ee" }
+  ]
+}
