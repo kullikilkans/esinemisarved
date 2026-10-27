@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Company {
+  id            Int       @id @default(autoincrement())
+  code          String    @unique
+  name          String
+  regCode       String
+  vatRegistered Boolean
+  vatNumber     String?
+  vatRate       Decimal   @db.Decimal(5, 2)
+  address       String
+  iban          String
+  bank          String
+  email         String
+  invoicePrefix String    @unique
+  nextInvoiceNo Int       @default(1)
+  createdAt     DateTime  @default(now())
+  invoices      Invoice[]
+}
+
+model Customer {
+  id        Int       @id @default(autoincrement())
+  name      String
+  regCode   String?
+  address   String?
+  email     String?
+  createdAt DateTime  @default(now())
+  invoices  Invoice[]
+}
+
+model Invoice {
+  id              Int      @id @default(autoincrement())
+  number          String
+  companyId       Int
+  customerId      Int
+  performanceDate DateTime @db.Date
+  invoiceDate     DateTime @db.Date
+  dueDate         DateTime @db.Date
+  description     String
+  amountNet       Decimal  @db.Decimal(12, 2)
+  vatRate         Decimal  @db.Decimal(5, 2)
+  vatAmount       Decimal  @db.Decimal(12, 2)
+  amountTotal     Decimal  @db.Decimal(12, 2)
+  createdAt       DateTime @default(now())
+
+  // Seller and buyer details copied at creation, so an issued invoice never changes
+  sellerName      String
+  sellerRegCode   String
+  sellerVatNumber String?
+  sellerAddress   String
+  sellerIban      String
+  sellerBank      String
+  sellerEmail     String
+  buyerName       String
+  buyerRegCode    String?
+  buyerAddress    String?
+  buyerEmail      String?
+
+  company  Company  @relation(fields: [companyId], references: [id], onDelete: Restrict)
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Restrict)
+
+  @@unique([companyId, number])
+  @@index([invoiceDate])
+  @@index([customerId])
+}
