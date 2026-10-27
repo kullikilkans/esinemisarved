@@ -49,20 +49,6 @@ function pdfUrl(id: number, inline = false) {
   return `/api/invoices/${id}/pdf${inline ? "?inline=1" : ""}`;
 }
 
-// Desktop browsers download reliably after an async save; phones get buttons
-function isDesktop() {
-  return window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-}
-
-function startDownload(id: number) {
-  const a = document.createElement("a");
-  a.href = pdfUrl(id);
-  a.download = "";
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-}
-
 function matchesCustomer(c: Customer, query: string) {
   const q = query.trim().toLocaleLowerCase("et");
   if (!q) return true;
@@ -141,7 +127,6 @@ export function InvoiceForm({
       });
       setCreated(invoice);
       toast.success(`Arve ${invoice.number} koostatud`);
-      if (isDesktop()) startDownload(invoice.id);
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err) {
       if (err instanceof ApiError && Object.keys(err.fields).length > 0) setErrors(err.fields);
