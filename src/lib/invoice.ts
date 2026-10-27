@@ -112,3 +112,16 @@ export function validateInvoice(input: unknown):
     },
   };
 }
+
+export type Turnover = {
+  year: number;
+  companies: {
+    companyId: number;
+    companyName: string;
+    invoicePrefix: string;
+    currentYear: string;
+    currentYearCount: number;
+    allTime: string;
+    allTimeCount: number;
+  }[];
+};
