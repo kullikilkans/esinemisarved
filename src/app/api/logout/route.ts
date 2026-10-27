@@ -1,11 +1,8 @@
-import { relativeRedirect } from "@/lib/redirect";
+import { redirectTo } from "@/lib/redirect";
 import { SESSION_COOKIE } from "@/lib/auth";
 
-export async function POST() {
-  const response = relativeRedirect("/login");
-  response.headers.append(
-    "Set-Cookie",
-    `${SESSION_COOKIE}=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax`,
-  );
+export async function POST(request: Request) {
+  const response = redirectTo(request, "/login");
+  response.cookies.delete(SESSION_COOKIE);
   return response;
 }

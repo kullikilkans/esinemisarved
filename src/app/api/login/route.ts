@@ -1,4 +1,4 @@
-import { relativeRedirect } from "@/lib/redirect";
+import { redirectTo } from "@/lib/redirect";
 import {
   SESSION_COOKIE,
   SESSION_MAX_AGE,
@@ -11,14 +11,16 @@ export async function POST(request: Request) {
   const password = String(form.get("password") ?? "");
   const token = await expectedSessionToken();
 
-  if (!token) return relativeRedirect("/login?error=config");
-  if (!(await isCorrectPassword(password))) return relativeRedirect("/login?error=wrong");
+  if (!token) return redirectTo(request, "/login?error=config");
+  if (!(await isCorrectPassword(password))) return redirectTo(request, "/login?error=wrong");
 
-  const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
-  const response = relativeRedirect("/");
-  response.headers.append(
-    "Set-Cookie",
-    `${SESSION_COOKIE}=${token}; Path=/; Max-Age=${SESSION_MAX_AGE}; HttpOnly; SameSite=Lax${secure}`,
-  );
+  const response = redirectTo(request, "/");
+  response.cookies.set(SESSION_COOKIE, token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: SESSION_MAX_AGE,
+  });
   return response;
 }
