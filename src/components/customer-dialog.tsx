@@ -87,6 +87,9 @@ function CustomerForm({
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    // The dialog is portaled, but React events still bubble through the
+    // component tree, so without this the invoice form would submit too
+    e.stopPropagation();
     const result = validateCustomer(values);
     if (!result.ok) {
       setErrors(result.errors);
@@ -127,7 +130,10 @@ function CustomerForm({
             inputMode={inputMode}
             autoComplete={autoComplete}
             value={values[key]}
-            onChange={(e) => setValues((v) => ({ ...v, [key]: e.target.value }))}
+            onChange={(e) => {
+              setValues((v) => ({ ...v, [key]: e.target.value }));
+              if (errors[key]) setErrors((errs) => ({ ...errs, [key]: undefined }));
+            }}
             aria-invalid={errors[key] ? true : undefined}
             aria-describedby={errors[key] ? `customer-${key}-error` : undefined}
           />
