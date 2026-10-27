@@ -1,5 +1,6 @@
 import { LogOut, Music } from "lucide-react";
 import { DesktopNav, MobileNav } from "@/components/app-nav";
+import { SiteFooter } from "@/components/site-footer";
 
 export default function AppLayout({ children }: LayoutProps<"/">) {
   return (
@@ -24,7 +25,8 @@ export default function AppLayout({ children }: LayoutProps<"/">) {
           </form>
         </div>
       </header>
-      <main className="mx-auto w-full max-w-[720px] flex-1 px-4 pt-6 pb-28 md:pb-12">{children}</main>
+      <main className="mx-auto w-full max-w-[720px] flex-1 px-4 pt-6 pb-6">{children}</main>
+      <SiteFooter className="pb-28 md:pb-6" />
       <MobileNav />
     </>
   );
